@@ -31,10 +31,12 @@ const { VM } = require('vm2');
         'let',
         'var',
         'function',
+        'console'
     ];
 
     for await (const line of userInput()) {
-        term.green(`\n${line}\n`);
+        const output = vm.run(`${line}`);
+        term.green(`\n${output}\n`);
     }
     process.exit();
 })();
