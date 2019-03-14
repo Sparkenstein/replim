@@ -9,11 +9,10 @@ const { VM } = require('vm2');
             const ip = await term.inputField(
                 { history: history, autoComplete: autoComplete, autoCompleteMenu: false, autoCompleteHint: true }
             ).promise;
-            if (ip) {
-                yield ip;
-            } else {
-                break;
+            if (!ip) {
+                return;
             }
+            yield ip;
         }
     }
     
