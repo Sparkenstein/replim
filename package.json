@@ -6,6 +6,7 @@
   "author": "Sparkenstein",
   "license": "MIT",
   "dependencies": {
+    "eslint": "^5.15.1",
     "terminal-kit": "^1.27.0",
     "vm2": "^3.6.10"
   }
