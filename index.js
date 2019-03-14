@@ -4,12 +4,16 @@ const { VM } = require('vm2');
 (async function () {
 
     async function* userInput(){
-        console.log("inside generator");
         while(true) {
+            term('js> ');
             const ip = await term.inputField(
                 { history: history, autoComplete: autoComplete, autoCompleteMenu: false, autoCompleteHint: true }
             ).promise;
-            yield ip;
+            if (ip) {
+                yield ip;
+            } else {
+                break;
+            }
         }
     }
     
@@ -24,13 +28,18 @@ const { VM } = require('vm2');
         'function',
     ];
 
-    term('js> ');
-    const ip = userInput()
-    if (ip.next()) {
-        const input = await ip.next();
-        console.log(input)
-        // const op = vm.run(`${input}`);
-        // term.green(`\n${input}\n`);    
+    for await (const line of userInput()) {
+        term.green(`\n${line}\n`)
     }
     process.exit();
+    
+    function terminate() {
+        term.grabInput( false ) ;
+        setTimeout( function() { process.exit() } , 100 ) ;
+    }
+    
+    term.on( 'key' , function( name , matches , data ) {
+        console.log( "'key' event:" , name ) ;
+        if ( name === 'CTRL_C' ) { terminate() ; }
+    } ) ;
 })();
