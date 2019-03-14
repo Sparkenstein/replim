@@ -1,0 +1,12 @@
+{
+  "name": "replim",
+  "version": "1.0.0",
+  "description": "node repl improved",
+  "main": "index.js",
+  "author": "Sparkenstein",
+  "license": "MIT",
+  "dependencies": {
+    "terminal-kit": "^1.27.0",
+    "vm2": "^3.6.10"
+  }
+}
