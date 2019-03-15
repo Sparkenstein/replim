@@ -3,10 +3,8 @@
 const term = require('terminal-kit').terminal;
 const { NodeVM } = require('vm2');
 const userInput = require('./lib/userInput');
-const stream = require('stream');
 
 (async function () {
-    const vmConsole = new console.Console({ stdout: new stream.PassThrough(), stderr: new stream.PassThrough() });
 
     const vm = new NodeVM({
         require: {
@@ -14,13 +12,12 @@ const stream = require('stream');
         },
         console: 'inherit',
         sandbox: {
-            term: term,
-            vmConsole
+            term
         }
     });
 
     for await (const line of userInput(term)) {
-        vm.run(`\nvmConsole("hello")\n`);
+        vm.run(`\n${line}\n`);
         // term.green(`\n${output}\n`);
     }
     process.exit();
