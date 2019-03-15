@@ -20,6 +20,7 @@ module.exports = {
         quotes: [ 'error', 'single' ],
         semi: 'error',
         strict: 'error',
-        'eol-last': 'error'
+        'eol-last': 'error',
+        "linebreak-style": 0
     }
 };
