@@ -12,11 +12,11 @@ const repl = require('repl');
         }
     });
 
-    repl.start({
+    const replServer = repl.start({
         prompt: 'node> ',
-        useColors: true,
         input: process.stdin,
         output: writable,
     });
+    replServer.setupHistory('./logs');
     
 })();
