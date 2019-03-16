@@ -1,24 +1,33 @@
 'use strict';
 
 const term = require('terminal-kit').terminal;
-const { NodeVM } = require('vm2');
 const userInput = require('./lib/userInput');
+const repl = require('repl');
 
 (async function () {
-
-    const vm = new NodeVM({
-        require: {
-            external: true
-        },
-        console: 'inherit',
-        sandbox: {
-            term
-        }
-    });
-
-    for await (const line of userInput(term)) {
-        vm.run(`\n${line}\n`);
-        // term.green(`\n${output}\n`);
+    function myEval(cmd, context, filename, callback) {
+        // console.log('eval', context);
+        callback(null, eval(cmd));
     }
-    process.exit();
+    function myWriter(output) {
+        console.log('->', output);
+        return term.green("==", output);
+    }
+
+    try {
+        repl.start({
+            prompt: 'node> ',
+            useColors: true,
+            writer: myWriter,
+            // eval: myEval
+        });
+
+        // server
+        // for await (const line of userInput(term)) {
+        //     vm.run(`\n${line}\n`);
+        // }
+    } catch (e) {
+        console.error(e);
+    }
+    // process.exit();
 })();
