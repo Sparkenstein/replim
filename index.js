@@ -1,33 +1,22 @@
 'use strict';
 
-const term = require('terminal-kit').terminal;
-const userInput = require('./lib/userInput');
+const stream = require('stream');
 const repl = require('repl');
 
 (async function () {
-    function myEval(cmd, context, filename, callback) {
-        // console.log('eval', context);
-        callback(null, eval(cmd));
-    }
-    function myWriter(output) {
-        console.log('->', output);
-        return term.green("==", output);
-    }
 
-    try {
-        repl.start({
-            prompt: 'node> ',
-            useColors: true,
-            writer: myWriter,
-            // eval: myEval
-        });
+    const writable = new stream.Writable({
+        write: function (chunk, encoding, next) {
+            process.stdout.write(chunk.toString());
+            next();
+        }
+    });
 
-        // server
-        // for await (const line of userInput(term)) {
-        //     vm.run(`\n${line}\n`);
-        // }
-    } catch (e) {
-        console.error(e);
-    }
-    // process.exit();
+    repl.start({
+        prompt: 'node> ',
+        useColors: true,
+        input: process.stdin,
+        output: writable,
+    });
+    
 })();
